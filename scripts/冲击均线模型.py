@@ -120,10 +120,12 @@ def func1(df):
 def test(df, start, end):
     df['upper'], df['middle'], df['lower'] = talib.BBANDS(df.close, matype=talib.MA_Type.T3)
     df['CCI'] = talib.CCI(df.high, df.low, df.close, timeperiod=24)
+    df['macd'], macdsignal, macdhist = talib.MACD(df.close)
+    df['HT_DCPERIOD'] = talib.HT_DCPERIOD(df.close)
     # (df.high > df.lower) & ((df.low < df.lower).shift(1))
     # df.CCI > 200  # False
     # (df.CCI >= -200) & (df.CCI < 0)  # False
-    df['buy_point'] = (df.high > df.lower) & (df.low < df.lower).shift(1) & ((df.CCI >= 0) & (df.CCI < 200) | (df.CCI < -200))
+    df['buy_point'] = (df.high > df.lower) & (df.low < df.lower).shift(1) & ((df.CCI >= 0) & (df.CCI < 200) | (df.CCI < -200)) & (df.macd > -0.05) & (df['HT_DCPERIOD'] > 20)
     x_point = df[df['buy_point'] == True].index.values+1
     y_point = df[df['buy_point'] == True].close
     plt.plot(df.close)
