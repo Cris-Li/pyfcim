@@ -135,6 +135,10 @@ class TradeSignal:
             db.commit()
             db.close()
 
+
+    def bolling_alert(self,_indata):
+        pass
+
     def tradeSignalCallback(self, indatas):
         if 'RT_LAST' in indatas.Fields:
             indata = InData()
