@@ -1,17 +1,15 @@
-import numpy as np
-import pandas as pd
 from scripts.波动率计算 import *
 
 df1 = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="113009广汽转债").fillna(method='ffill')
 df2 = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="113021中信转债").fillna(method='ffill')
 df = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="110053苏银转债").fillna(method='ffill')
 
-
 df3 = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="127012招路转债").fillna(method='ffill')
 df4 = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="113011光大转债").fillna(method='ffill')
 df5 = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="113013国君转债").fillna(method='ffill')
 df6 = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="110046圆通转债").fillna(method='ffill')
 df7 = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="110051中天转债").fillna(method='ffill')
+
 
 # df1,df2,df4,df5
 #
@@ -105,14 +103,14 @@ def func1(df):
     su = []
     for item in temp:
         if item < 0:
-           su.append(item)
+            su.append(item)
         else:
-            if su.__len__()>0:
+            if su.__len__() > 0:
                 notes.append(min(su))
                 su = []
     plt.hist(notes, 100)
     plt.show()
-    print("30:%f"%np.quantile(notes, 0.3))
+    print("30:%f" % np.quantile(notes, 0.3))
     print("70:%f" % np.quantile(notes, 0.7))
     return notes
 
@@ -125,25 +123,20 @@ def test(df, start, end):
     # (df.high > df.lower) & ((df.low < df.lower).shift(1))
     # df.CCI > 200  # False
     # (df.CCI >= -200) & (df.CCI < 0)  # False
-    df['buy_point'] = (df.high > df.lower) & (df.low < df.lower).shift(1) & ((df.CCI >= 0) & (df.CCI < 200) | (df.CCI < -200)) & (df.macd > -0.05) & (df['HT_DCPERIOD'] > 20)
-    x_point = df[df['buy_point'] == True].index.values+1
+    df['buy_point'] = (df.high > df.lower) & (df.low < df.lower).shift(1) & (
+                (df.CCI >= 0) & (df.CCI < 200) | (df.CCI < -200)) & (df.macd > -0.05) & (df['HT_DCPERIOD'] > 20)
+    x_point = df[df['buy_point'] == True].index.values + 1
     y_point = df[df['buy_point'] == True].close
     plt.plot(df.close)
     plt.plot(x_point, y_point, 'o')
     plt.show()
 
 
-
-
-test(df.iloc[500:3500,:].copy(), 500, 1500)
-
-
-
-
+test(df.iloc[500:3500, :].copy(), 500, 1500)
 
 
 ####
-def bolltest(df,start,end):
+def bolltest(df, start, end):
     upper, middle, lower = talib.BBANDS(df.close, matype=talib.MA_Type.T3)
     plt.plot(upper[start:end])
     plt.plot(middle[start:end])
@@ -155,14 +148,16 @@ def bolltest(df,start,end):
     # temp[:start] = False
     # temp[end:] = False
     # plt.plot(idx[temp], df.close[temp],'yo')
-    plt.legend(['upper','middle','lower','close'])
+    plt.legend(['upper', 'middle', 'lower', 'close'])
     plt.title("bolling")
     plt.show()
 
-output = bolltest(df, 500,1500)
 
-def ATRtest(df, start,end):
-    outATR = talib.ATR(df.high,df.low,df.close,timeperiod=10)
+output = bolltest(df, 500, 1500)
+
+
+def ATRtest(df, start, end):
+    outATR = talib.ATR(df.high, df.low, df.close, timeperiod=10)
     plt.plot(outATR[start:end])
     plt.legend(['ATR'])
     plt.twinx()
@@ -171,7 +166,9 @@ def ATRtest(df, start,end):
     plt.title("ATR")
     plt.show()
 
-outATR = ATRtest(df, 500,1500)
+
+outATR = ATRtest(df, 500, 1500)
+
 
 def HT_DCPERIODtest(df, start, end):
     outHT = talib.HT_DCPERIOD(df.close)
@@ -182,7 +179,9 @@ def HT_DCPERIODtest(df, start, end):
     plt.title("HT_DCPEIOD")
     plt.show()
 
+
 HT_DCPERIODtest(df, 500, 1500)
+
 
 def MACDtest(df, start, end):
     macd, macdsignal, macdhist = talib.MACD(df.close)
@@ -193,7 +192,9 @@ def MACDtest(df, start, end):
     plt.title("MACD")
     plt.show()
 
-MACDtest(df,500,1500)
+
+MACDtest(df, 500, 1500)
+
 
 def CCItest(df, start, end):
     real = talib.CCI(df.high, df.low, df.close, timeperiod=24)
@@ -204,7 +205,9 @@ def CCItest(df, start, end):
     plt.title("CCI")
     plt.show()
 
-CCItest(df,500,1500)
+
+CCItest(df, 500, 1500)
+
 
 def RSItest(df, start, end):
     real = talib.RSI(df.high, timeperiod=14)
@@ -215,15 +218,5 @@ def RSItest(df, start, end):
     plt.title("RSI")
     plt.show()
 
-RSItest(df,500,1500)
 
-
-
-
-
-
-
-
-
-
-
+RSItest(df, 500, 1500)
