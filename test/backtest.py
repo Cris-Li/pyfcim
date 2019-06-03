@@ -7,6 +7,11 @@ from scripts.波动率计算 import *
 
 df = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx", sheet_name="113009广汽转债").fillna(method='ffill')
 
+def cal_sell(_df1,_idx):
+    for i in np.arange(_idx, _idx+400):
+        if _df1.H[i] > _df1.close[_idx]+0.1:
+
+
 
 def convert_f(_df):
     _df.index = pd.to_datetime(_df.time)
@@ -19,6 +24,7 @@ def convert_f(_df):
     _df['buy_point'] = (_df.high > _df.lower) & (_df.low < _df.lower).shift(1) & (
             (_df.CCI >= 0) & (_df.CCI < 200) | (_df.CCI < -200)) & (_df.macd > -0.05) & (_df['HT_DCPERIOD'] > 20)
     _df['sell_point'] = (_df.high > _df.upper)
+    idx, = np.where(_df['buy_point'] == True)
     _df.rename(columns={'open': 'O', 'high': 'H', 'low': 'L', 'close': 'C'}, inplace=True)
     return _df
 
