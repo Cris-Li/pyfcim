@@ -29,37 +29,37 @@ df7 = pd.read_excel("C:\\Users\\Lenovo\\Desktop\\转债分钟行情数据.xlsx",
 # df6['KAMA'] = talib.KAMA(df6.close, 20)
 # df7['KAMA'] = talib.KAMA(df7.close, 20)
 #
-# def profitsCal(df,start,end,positionList,upper=0.02,lower=0.01, adds = 0.1, cutoff = 0.1):
-#     buypriceList = []
-#     yieldList = []
-#     for i in np.arange(1,df.shape[0]):
-#         if len(buypriceList) > 0 and (df.high[i] >= buypriceList[0] + 0.02 or df.high[i-1] >= buypriceList[0] + 0.02):
-#             yieldList.append(0.015)
-#             buypriceList.pop(0)
-#         # if len(buypriceList) > 0 and df.high[i] == buypriceList[0] + 0.03:
-#         #     yieldList.append(0.015)
-#         #     buypriceList.pop(0)
-#         # if len(buypriceList) > 0 and df.high[i] == buypriceList[0] + 0.02:
-#         #     yieldList.append(-0.005)
-#         #     buypriceList.pop(0)
-#         if len(buypriceList) > 0 and df.low[i] <= df.high[i] - 0.02:
-#             yieldList.append(max(df.high[i]-buypriceList[0]-0.02,df.high[i-1]-buypriceList[0]-0.02))
-#             buypriceList.pop(0)
-#
-#         if df.high[i] >= df.KAMA[i]-0.02 and df.close[i-1] < df.KAMA[i-1]: # 前一分钟的收盘价在均值一下，这一分钟的最高价在均值以上
-#             if buypriceList.__len__() == 0:
-#                 buypriceList.append(df.KAMA[i]-0.015)
-#     return yieldList
-#
-# def Cal(df,start,end,positionList,upper=0.02,lower=0.01, adds = 0.1, cutoff = 0.1):
-#     yieldList = []
-#     for i in np.arange(100, df.shape[0]):
-#         if df.close[i-1] < df.KAMA[i-1]:
-#             if df.high[i] >= df.KAMA[i] + 0.01: # 前一分钟的收盘价在均值一下，这一分钟的最高价在均值以上
-#                 yieldList.append(0.01)
-#             if df.high[i] > df.KAMA[i] - 0.02 and df.high[i] < df.KAMA[i] + 0.01:
-#                 yieldList.append(-0.01)
-#     return yieldList
+def profitsCal(df,start,end,positionList,upper=0.02,lower=0.01, adds = 0.1, cutoff = 0.1):
+    buypriceList = []
+    yieldList = []
+    for i in np.arange(1,df.shape[0]):
+        if len(buypriceList) > 0 and (df.high[i] >= buypriceList[0] + 0.02 or df.high[i-1] >= buypriceList[0] + 0.02):
+            yieldList.append(0.015)
+            buypriceList.pop(0)
+        # if len(buypriceList) > 0 and df.high[i] == buypriceList[0] + 0.03:
+        #     yieldList.append(0.015)
+        #     buypriceList.pop(0)
+        # if len(buypriceList) > 0 and df.high[i] == buypriceList[0] + 0.02:
+        #     yieldList.append(-0.005)
+        #     buypriceList.pop(0)
+        if len(buypriceList) > 0 and df.low[i] <= df.high[i] - 0.02:
+            yieldList.append(max(df.high[i]-buypriceList[0]-0.02,df.high[i-1]-buypriceList[0]-0.02))
+            buypriceList.pop(0)
+
+        if df.high[i] >= df.KAMA[i]-0.02 and df.close[i-1] < df.KAMA[i-1]: # 前一分钟的收盘价在均值一下，这一分钟的最高价在均值以上
+            if buypriceList.__len__() == 0:
+                buypriceList.append(df.KAMA[i]-0.015)
+    return yieldList
+
+def Cal(df,start,end,positionList,upper=0.02,lower=0.01, adds = 0.1, cutoff = 0.1):
+    yieldList = []
+    for i in np.arange(100, df.shape[0]):
+        if df.close[i-1] < df.KAMA[i-1]:
+            if df.high[i] >= df.KAMA[i] + 0.01: # 前一分钟的收盘价在均值一下，这一分钟的最高价在均值以上
+                yieldList.append(0.01)
+            if df.high[i] > df.KAMA[i] - 0.02 and df.high[i] < df.KAMA[i] + 0.01:
+                yieldList.append(-0.01)
+    return yieldList
 #
 #
 # yieldList = profitsCal(df2,100,4000,[])
